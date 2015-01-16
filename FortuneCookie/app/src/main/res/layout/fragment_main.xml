@@ -1,12 +1,86 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fortune:"
+        android:id="@+id/fortuneLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        style="@style/FortuneLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Learn Chinese:"
+        android:id="@+id/languageLabel"
+        android:layout_below="@+id/fortune"
+        style="@style/FortuneLabel"
+        android:paddingTop="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="English:"
+        android:id="@+id/englishLabel"
+        android:layout_below="@id/languageLabel"
+        style="@style/FortuneLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chinese:"
+        android:id="@+id/chineseLabel"
+        android:layout_below="@id/englishLabel"
+        style="@style/FortuneLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pronunciation:"
+        android:id="@+id/pronounceLabel"
+        android:layout_below="@id/chineseLabel"
+        style="@style/FortuneLabel" />
+
+    <TextView
+        android:id="@+id/fortune"
+        android:text="Up and down like a fiddler's elbow."
+        android:layout_alignParentTop="false"
+        android:layout_toEndOf="@+id/fortuneLabel"
+        style="@style/FortuneContent"
+        android:layout_alignTop="@+id/fortuneLabel" />
+
+    <TextView
+        android:id="@+id/english"
+        android:text="Does the room come with..."
+        android:layout_alignParentTop="false"
+        android:layout_toEndOf="@+id/englishLabel"
+        style="@style/FortuneContent"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignTop="@+id/englishLabel" />
+
+    <TextView
+        android:id="@+id/chinese"
+        android:text="有没有"
+        android:layout_alignParentTop="false"
+        android:layout_toEndOf="@+id/chineseLabel"
+        style="@style/FortuneContent"
+        android:layout_alignTop="@+id/chineseLabel" />
+
+    <TextView
+        android:id="@+id/pronunciation"
+        android:text="Yǒu méiyǒu"
+        android:layout_alignParentTop="false"
+        android:layout_toEndOf="@+id/pronounceLabel"
+        style="@style/FortuneContent"
+        android:layout_alignTop="@+id/pronounceLabel" />
 
 </RelativeLayout>

@@ -5,4 +5,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="FortuneLabel">
+        <item name="android:textSize">24dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FortuneContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
 </resources>
