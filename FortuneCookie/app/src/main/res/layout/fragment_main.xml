@@ -6,81 +6,182 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Fortune:"
-        android:id="@+id/fortuneLabel"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        style="@style/FortuneLabel" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Learn Chinese:"
-        android:id="@+id/languageLabel"
-        android:layout_below="@+id/fortune"
-        style="@style/FortuneLabel"
-        android:paddingTop="24dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="English:"
-        android:id="@+id/englishLabel"
-        android:layout_below="@id/languageLabel"
-        style="@style/FortuneLabel" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chinese:"
-        android:id="@+id/chineseLabel"
-        android:layout_below="@id/englishLabel"
-        style="@style/FortuneLabel" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pronunciation:"
-        android:id="@+id/pronounceLabel"
-        android:layout_below="@id/chineseLabel"
-        style="@style/FortuneLabel" />
-
-    <TextView
-        android:id="@+id/fortune"
-        android:text="Up and down like a fiddler's elbow."
-        android:layout_alignParentTop="false"
-        android:layout_toEndOf="@+id/fortuneLabel"
-        style="@style/FortuneContent"
-        android:layout_alignTop="@+id/fortuneLabel" />
-
-    <TextView
-        android:id="@+id/english"
-        android:text="Does the room come with..."
-        android:layout_alignParentTop="false"
-        android:layout_toEndOf="@+id/englishLabel"
-        style="@style/FortuneContent"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentStart="false"
         android:layout_alignParentEnd="false"
-        android:layout_alignTop="@+id/englishLabel" />
+        android:id="@+id/fortuneLinear">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fortune:"
+            android:id="@+id/fortuneLabel"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            style="@style/FortuneLabel" />
+
+        <TextView
+            android:id="@+id/fortune"
+            android:text="Up and down like a fiddler&apos;s elbow. Hello long text tro  see ho wrapping works out."
+            android:layout_alignParentTop="false"
+            android:layout_toEndOf="@+id/fortuneLabel"
+            style="@style/FortuneContent"
+            android:layout_alignTop="@+id/fortuneLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/languageLinear"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/fortuneLinear"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Learn Chinese:"
+            android:id="@+id/languageLabel"
+            android:layout_below="@+id/fortune"
+            style="@style/FortuneLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="English:"
+            android:id="@+id/englishLabel"
+            style="@style/FortuneLabel"
+            android:layout_below="@+id/languageLabel"
+            android:layout_alignParentStart="true"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/english"
+            android:text="Does the room come with..."
+            android:layout_alignParentTop="false"
+            android:layout_toEndOf="@+id/englishLabel"
+            style="@style/FortuneContent"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignTop="@+id/englishLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chinese:"
+            android:id="@+id/chineseLabel"
+            android:layout_below="@id/englishLabel"
+            style="@style/FortuneLabel" />
+
+        <TextView
+            android:id="@+id/chinese"
+            android:text="有没有"
+            android:layout_alignParentTop="false"
+            android:layout_toEndOf="@+id/chineseLabel"
+            style="@style/FortuneContent"
+            android:layout_alignTop="@+id/chineseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pronunciation:"
+            android:id="@+id/pronounceLabel"
+            android:layout_below="@id/chineseLabel"
+            style="@style/FortuneLabel" />
+
+        <TextView
+            android:id="@+id/pronunciation"
+            android:text="Yǒu méiyǒu"
+            android:layout_alignParentTop="false"
+            android:layout_toEndOf="@+id/pronounceLabel"
+            style="@style/FortuneContent"
+            android:layout_alignTop="@+id/pronounceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/chinese"
-        android:text="有没有"
-        android:layout_alignParentTop="false"
-        android:layout_toEndOf="@+id/chineseLabel"
-        style="@style/FortuneContent"
-        android:layout_alignTop="@+id/chineseLabel" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lucky Numbers:"
+        android:id="@+id/lottoLabel"
+        style="@style/FortuneLabel"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_below="@+id/languageLinear"
+        android:layout_marginTop="24dp" />
 
-    <TextView
-        android:id="@+id/pronunciation"
-        android:text="Yǒu méiyǒu"
-        android:layout_alignParentTop="false"
-        android:layout_toEndOf="@+id/pronounceLabel"
-        style="@style/FortuneContent"
-        android:layout_alignTop="@+id/pronounceLabel" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lottoLabel"
+        android:id="@+id/lottoLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01"
+            android:id="@+id/number1"
+            style="@style/FortuneContent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="02"
+            android:id="@+id/number2"
+            style="@style/FortuneContent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03"
+            android:id="@+id/number3"
+            style="@style/FortuneContent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="04"
+            android:id="@+id/number4"
+            style="@style/FortuneContent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="05"
+            android:id="@+id/number5"
+            style="@style/FortuneContent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="06"
+            android:id="@+id/number6"
+            style="@style/FortuneContent" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generate New Lotto Numbers"
+        android:id="@+id/button"
+        android:layout_below="@+id/lottoLayout"
+        android:layout_centerInParent="true"
+        android:layout_margin="32dp" />
 
 </RelativeLayout>
