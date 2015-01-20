@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:id="@+id/text_textview"
+    android:text="Up and down like a fiddler&apos;s elbow. Hello long text tro  see ho wrapping works out."
+    android:layout_marginStart="24dp"
+    android:textSize="16dp"
+    android:textStyle="italic"
+    android:layout_gravity="right"
+    android:enabled="true"
+    android:gravity="bottom|right"
+    android:paddingBottom="16dp"
+    android:paddingRight="16dp">
+
+</TextView>

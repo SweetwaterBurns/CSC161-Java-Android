@@ -1,7 +1,6 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,10 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends ActionBarActivity {
+
+    static ArrayAdapter<String> LottoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new FortuneFragment())
                     .commit();
         }
     }
@@ -51,16 +55,46 @@ public class MainActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class FortuneFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public FortuneFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+          /*  Fortune ffortune = new Fortune(this.getActivity());
+            Lang llang = new Lang(this.getActivity());
+
+
+            ArrayList<String> fortune = new ArrayList<>(Arrays.asList(ffortune.random()));
+            ArrayList<String> lang = new ArrayList<>(Arrays.asList(llang.random()));
+*/
+
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            String[] numbers = Lotto.random();
+            ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(numbers));
+
+            LottoAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.lotto,
+                            R.id.lotto_textview,
+                            lottoNumbers);
+
+            GridView lottoGridView = (GridView) rootView.findViewById(R.id.lotto_numbers);
+            lottoGridView.setAdapter(LottoAdapter);
+
+
             return rootView;
         }
+    }
+
+    public void onClick(View view){
+        String[] numbers = Lotto.random();
+        LottoAdapter.clear();
+        ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(numbers));
+        LottoAdapter.addAll(lottoNumbers);
     }
 }
