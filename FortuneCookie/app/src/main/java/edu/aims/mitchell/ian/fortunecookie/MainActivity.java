@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +18,10 @@ import java.util.Arrays;
 public class MainActivity extends ActionBarActivity {
 
     static ArrayAdapter<String> LottoAdapter;
+    static ArrayAdapter<String> FortuneAdapter;
+    static ArrayAdapter<String> LangEngAdapter;
+    static ArrayAdapter<String> LangChiAdapter;
+    static ArrayAdapter<String> LangProAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,19 +68,40 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-          /*  Fortune ffortune = new Fortune(this.getActivity());
-            Lang llang = new Lang(this.getActivity());
 
-
-            ArrayList<String> fortune = new ArrayList<>(Arrays.asList(ffortune.random()));
-            ArrayList<String> lang = new ArrayList<>(Arrays.asList(llang.random()));
-*/
+            ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(getString(R.string.fortune_text)));
+            ArrayList<String> langEng = new ArrayList<String>(Arrays.asList(getString(R.string.english_text)));
+            ArrayList<String> langChi = new ArrayList<String>(Arrays.asList(getString(R.string.chinese_text)));
+            ArrayList<String> langPro = new ArrayList<String>(Arrays.asList(getString(R.string.pro_text)));
+            ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
 
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            String[] numbers = Lotto.random();
-            ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(numbers));
+            FortuneAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.text,
+                            R.id.text_textview,
+                            fortune);
 
+            LangEngAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.text,
+                            R.id.text_textview,
+                            langEng);
+            LangChiAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.text,
+                            R.id.text_textview,
+                            langChi);
+            LangProAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.text,
+                            R.id.text_textview,
+                            langPro);
             LottoAdapter =
                     new ArrayAdapter<String>(
                             getActivity(),
@@ -83,7 +109,16 @@ public class MainActivity extends ActionBarActivity {
                             R.id.lotto_textview,
                             lottoNumbers);
 
+            ListView fortuneLinearView = (ListView) rootView.findViewById(R.id.fortune_view);
+            ListView langEngLinearView = (ListView) rootView.findViewById(R.id.lang_eng_view);
+            ListView langChiLinearView = (ListView) rootView.findViewById(R.id.lang_chi_view);
+            ListView langProLinearView = (ListView) rootView.findViewById(R.id.lang_pro_view);
             GridView lottoGridView = (GridView) rootView.findViewById(R.id.lotto_numbers);
+
+            fortuneLinearView.setAdapter(FortuneAdapter);
+            langEngLinearView.setAdapter(LangEngAdapter);
+            langChiLinearView.setAdapter(LangChiAdapter);
+            langProLinearView.setAdapter(LangProAdapter);
             lottoGridView.setAdapter(LottoAdapter);
 
 
@@ -92,9 +127,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClick(View view){
-        String[] numbers = Lotto.random();
         LottoAdapter.clear();
-        ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(numbers));
+        ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
         LottoAdapter.addAll(lottoNumbers);
     }
 }

@@ -26,21 +26,26 @@ import java.util.Random;
  */
 public class Lotto {
 
-    private static String[] ns = new String[6];
+    //private static String[] ns = new String[6];
 
     public static String[] random() {
         int[] n = new int[6];
         int tmp;
+        Random rn = new Random();
+        boolean match;
+        String[] ns = new String[6];
 
         for (int i = 0; i < 6; i++) {
-            for (int j = i - 1; j >= 0; j--){
-                while(n[i] == n[j]){
-                    Random rn;
-                    rn = new Random();
-                    int number = rn.nextInt(100);
-                    n[i] = number;
+            do {
+                match = false;
+                n[i] = rn.nextInt(100);
+
+                for (int j = i - 1; j >= 0; j--) {
+                    if (n[i] == n[j]) {
+                        match = true;
+                    }
                 }
-            }
+            }while (match);
         }
 
         for (int i = 0; i < 6 ; i++){
