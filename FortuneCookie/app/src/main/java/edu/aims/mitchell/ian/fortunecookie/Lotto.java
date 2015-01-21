@@ -1,24 +1,5 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Random;
-
 import java.util.Random;
 
 /**
@@ -38,7 +19,7 @@ public class Lotto {
         for (int i = 0; i < 6; i++) {
             do {
                 match = false;
-                n[i] = rn.nextInt(100);
+                n[i] = rn.nextInt(49) + 1;
 
                 for (int j = i - 1; j >= 0; j--) {
                     if (n[i] == n[j]) {
