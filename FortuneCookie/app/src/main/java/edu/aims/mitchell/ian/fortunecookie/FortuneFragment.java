@@ -91,10 +91,4 @@ public class FortuneFragment extends Fragment {
 
         return rootView;
     }
-
-    public void onClick(View view){
-        LottoAdapter.clear();
-        ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
-        LottoAdapter.addAll(lottoNumbers);
-    }
 }
