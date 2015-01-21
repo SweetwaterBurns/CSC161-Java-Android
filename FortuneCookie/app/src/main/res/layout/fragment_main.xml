@@ -97,8 +97,7 @@
             android:id="@+id/lotto_button"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="@string/lotto_button_text"
-            android:onClick="onClick" />
+            android:text="@string/lotto_button_text" />
 
     </LinearLayout>
 </ScrollView>
