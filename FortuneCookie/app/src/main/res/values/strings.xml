@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Fortune Cookie</string>
     <string name="app_settings">Settings</string>
     <string name="fortune_label">Fortune:</string>
@@ -10,9 +9,11 @@
     <string name="pro_label">Pronunciation:</string>
     <string name="lotto_label">Lucky Numbers:</string>
     <string name="fortune_text">Up and down like a fiddler\'s elbow.</string>
-    <string name="english_text">Does the room come with...</string>
+    <string name="english_text">Does the room come with…</string>
     <string name="chinese_text">有没有</string>
     <string name="pro_text">Yǒu méiyǒu</string>
-    <string name="lotto_text">99</string>
     <string name="lotto_button_text">Generate New Lotto Numbers</string>
+    <string name="url_fortune">http://fortunecookieapi.com/v1/fortunes/5403c81dc2fea4020029aaaa</string>
+    <!--<string name="url_fortune">http://fortunecookieapi.com/v1/cookie</string>-->
+    <string name="url_lang">http://fortunecookieapi.com/v1/lessons/</string>
 </resources>

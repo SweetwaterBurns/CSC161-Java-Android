@@ -1,104 +1,104 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$PlaceholderFragment">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fortuneLinear">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fortune_label"
-            android:id="@+id/fortuneLabel"
-            style="@style/label" />
-
-         <ListView
+        <LinearLayout
+            android:id="@+id/fortuneLinear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/fortune_view"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            style="@style/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/language_label"
-            android:id="@+id/learnLabel"
-            android:password="false" />
+            <TextView
+                android:id="@+id/fortuneLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fortune_label" />
 
-        <TextView
-            style="@style/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/english_label"
-            android:id="@+id/engLabel" />
+            <ListView
+                android:id="@+id/fortune_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lang_eng_view"
-            />
+            <TextView
+                android:id="@+id/learnLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:password="false"
+                android:text="@string/language_label" />
 
-        <TextView
-            style="@style/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/chinese_label"
-            android:id="@+id/chiLabel" />
+            <TextView
+                android:id="@+id/engLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/english_label" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lang_chi_view" />
+            <ListView
+                android:id="@+id/lang_eng_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pro_label"
-            android:id="@+id/proLabel" />
+            <TextView
+                android:id="@+id/chiLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chinese_label" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lang_pro_view" />
+            <ListView
+                android:id="@+id/lang_chi_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lotto_label"
-            android:id="@+id/lottoLabel" />
+            <TextView
+                android:id="@+id/proLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pro_label" />
 
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lotto_numbers"
-            android:gravity="top|fill_vertical"
-            android:numColumns="6"
-            android:minHeight="64dp"
-            android:layout_gravity="center_vertical" />
+            <ListView
+                android:id="@+id/lang_pro_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lotto_button"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/lotto_button_text" />
+            <TextView
+                android:id="@+id/lottoLabel"
+                style="@style/label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lotto_label" />
 
-    </LinearLayout>
-</ScrollView>
+            <GridView
+                android:id="@+id/lotto_numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="top|fill_vertical"
+                android:minHeight="64dp"
+                android:numColumns="6" />
+
+            <Button
+                android:id="@+id/lotto_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/lotto_button_text" />
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

@@ -26,12 +26,12 @@ public class Lotto {
                         match = true;
                     }
                 }
-            }while (match);
+            } while (match);
         }
 
-        for (int i = 0; i < 6 ; i++){
-            for (int j = i + 1; j < 6; j++){
-                if (n[i] > n[j]){
+        for (int i = 0; i < 6; i++) {
+            for (int j = i + 1; j < 6; j++) {
+                if (n[i] > n[j]) {
                     tmp = n[i];
                     n[i] = n[j];
                     n[j] = tmp;
