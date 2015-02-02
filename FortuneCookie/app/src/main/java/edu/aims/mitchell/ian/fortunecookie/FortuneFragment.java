@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,6 +122,14 @@ public class FortuneFragment extends Fragment {
 			return super.toString();
 		}
 
+
+		private String fortuneFromJson(String Json)
+				throws JSONException {
+			JSONObject fortuneJson = new JSONObject(Json);
+
+			return fortuneJson.getString("message");
+		}
+
 		@Override
 		protected String doInBackground(Void... params) {
 			// These two need to be declared outside the try/catch
@@ -184,11 +195,15 @@ public class FortuneFragment extends Fragment {
 				f[0] = "Failed to load";
 				Log.d("FortuneJSON", "Null");
 			}
-			return fortuneJsonStr;
+			try {
+				return fortuneFromJson(fortuneJsonStr);
+			} catch (JSONException e){}
+			return null;
 		}
 
 
 		protected void onPostExecute(String result) {
+
 			if (result != null) {
 				FortuneAdapter.clear();
 				ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(result));
