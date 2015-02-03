@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,11 +98,6 @@ public class FortuneFragment extends Fragment {
 		lotto_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				LottoAdapter.clear();
-				ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
-				LottoAdapter.addAll(lottoNumbers);
-
 				FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 				fortuneTask.execute();
 			}
@@ -111,31 +107,58 @@ public class FortuneFragment extends Fragment {
 		return rootView;
 	}
 
-	public class FortuneAsyncTask extends AsyncTask<Void, Void, String> {
+	public class FortuneAsyncTask extends AsyncTask<Void, Void, String[]> {
 
-		String[] f = new String[1];
 		String hex;
 		Random rnd = new Random();
 
-		@Override
-		public String toString() {
-			return super.toString();
-		}
-
-
-		private String fortuneFromJson(String Json)
+		private String[] fortuneFromJson(String Json)
 				throws JSONException {
-			JSONObject fortuneJson = new JSONObject(Json);
+			//String[] sort;
 
-			return fortuneJson.getString("message");
+			final String API_FOR = "fortune";
+			final String API_MES = "message";
+			final String API_LOT = "lotto";
+			final String API_NUM = "numbers";
+			final String API_LES = "lesson";
+			final String API_ENG = "english";
+			final String API_CHI = "chinese";
+			final String API_PRO = "pronunciation";
+
+			JSONArray cookieJson = new JSONArray(Json);
+			JSONObject fortuneObj = cookieJson.getJSONObject(0).getJSONObject(API_FOR);
+			JSONObject lessonObj = cookieJson.getJSONObject(0).getJSONObject(API_LES);
+			JSONObject lottoObj = cookieJson.getJSONObject(0).getJSONObject(API_LOT);
+
+			String fortune = fortuneObj.getString(API_MES);
+			Log.d("Fortune: ", fortune);
+			String english = lessonObj.getString(API_ENG);
+			Log.d("English: ", english);
+			String chinese = lessonObj.getString(API_CHI);
+			Log.d("Chinese: ", chinese);
+			String pro = lessonObj.getString(API_PRO);
+			Log.d("Pronunciation: ", pro);
+
+			String[] numbers = new String[6];
+
+			for (int i = 0; i < 6; i++) {
+				numbers[i] = Integer.toString(lottoObj.getJSONArray(API_NUM).getInt(i));
+				Log.d("Number " + i + ": ", numbers[i]);
+			}
+
+
+			String[] sort = {fortune, english, chinese, pro, numbers[0], numbers[1], numbers[2],
+					numbers[3], numbers[4], numbers[5]};
+
+			return sort;
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String[] doInBackground(Void... params) {
 			// These two need to be declared outside the try/catch
 			// so that they can be closed in the finally block.
 
-			hex = Integer.toHexString(rnd.nextInt(543) + 43828);
+			//hex = Integer.toHexString(rnd.nextInt(543) + 43828);
 
 			HttpURLConnection urlConnection = null;
 			BufferedReader reader = null;
@@ -144,7 +167,7 @@ public class FortuneFragment extends Fragment {
 			String fortuneJsonStr = null;
 
 			try {
-				URL url = new URL(getString(R.string.url_fortune) + hex);
+				URL url = new URL(getString(R.string.url_fortune));// + hex);
 
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.setRequestMethod("GET");
@@ -189,28 +212,54 @@ public class FortuneFragment extends Fragment {
 				}
 			}
 			if (fortuneJsonStr != null) {
-				f[0] = fortuneJsonStr;
-				Log.d("FortuneJSON", f[0]);
+				Log.d("FortuneJSON", fortuneJsonStr);
 			} else {
-				f[0] = "Failed to load";
 				Log.d("FortuneJSON", "Null");
 			}
 			try {
 				return fortuneFromJson(fortuneJsonStr);
-			} catch (JSONException e){}
+			} catch (JSONException e) {
+				Log.e("JSONParse", e.getMessage(), e);
+				e.printStackTrace();
+			}
 			return null;
 		}
 
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String[] result) {
 
 			if (result != null) {
-				FortuneAdapter.clear();
-				ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(result));
-				FortuneAdapter.addAll(fortune);
-			}
-		}
+				int[] numbers = new int[6];
 
+				FortuneAdapter.clear();
+				ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(result[0]));
+				FortuneAdapter.addAll(fortune);
+
+				LangEngAdapter.clear();
+				ArrayList<String> english = new ArrayList<>(Arrays.asList(result[1]));
+				LangEngAdapter.addAll(english);
+
+				LangChiAdapter.clear();
+				ArrayList<String> chinese = new ArrayList<>(Arrays.asList(result[2]));
+				LangChiAdapter.addAll(chinese);
+
+				LangProAdapter.clear();
+				ArrayList<String> pro = new ArrayList<>(Arrays.asList(result[3]));
+				LangProAdapter.addAll(pro);
+
+				for (int i = 0; i < 6; i++) {
+					numbers[i] = Integer.valueOf(result[i + 4]);
+				}
+
+				LottoAdapter.clear();
+				ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
+				LottoAdapter.addAll(lottoNumbers);
+
+			}
+
+		}
 	}
+
 }
+
 
