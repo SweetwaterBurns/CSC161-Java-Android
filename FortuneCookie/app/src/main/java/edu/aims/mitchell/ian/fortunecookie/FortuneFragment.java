@@ -24,7 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 
 /**
@@ -109,13 +108,8 @@ public class FortuneFragment extends Fragment {
 
 	public class FortuneAsyncTask extends AsyncTask<Void, Void, String[]> {
 
-		String hex;
-		Random rnd = new Random();
-
 		private String[] fortuneFromJson(String Json)
 				throws JSONException {
-			//String[] sort;
-
 			final String API_FOR = "fortune";
 			final String API_MES = "message";
 			final String API_LOT = "lotto";
@@ -139,35 +133,35 @@ public class FortuneFragment extends Fragment {
 			String pro = lessonObj.getString(API_PRO);
 			Log.d("Pronunciation: ", pro);
 
-			String[] numbers = new String[6];
+/*I don't like that the API will send doubles of numbers... Not really useful for picking Lotto Numbers.
+ *Kept the code I used in so you could see how I parsed it...
+ */
+
+/* 			String[] numbers = new String[6];
 
 			for (int i = 0; i < 6; i++) {
 				numbers[i] = Integer.toString(lottoObj.getJSONArray(API_NUM).getInt(i));
 				Log.d("Number " + i + ": ", numbers[i]);
 			}
+*/
 
-
-			String[] sort = {fortune, english, chinese, pro, numbers[0], numbers[1], numbers[2],
-					numbers[3], numbers[4], numbers[5]};
+/*No need to pass the numbers back as I'm not using them.
+ */
+			String[] sort = {fortune, english, chinese, pro};//, numbers[0], numbers[1], numbers[2],numbers[3], numbers[4], numbers[5]};
 
 			return sort;
 		}
 
 		@Override
 		protected String[] doInBackground(Void... params) {
-			// These two need to be declared outside the try/catch
-			// so that they can be closed in the finally block.
-
-			//hex = Integer.toHexString(rnd.nextInt(543) + 43828);
 
 			HttpURLConnection urlConnection = null;
 			BufferedReader reader = null;
 
-			// Will contain the raw JSON response as a string.
 			String fortuneJsonStr = null;
 
 			try {
-				URL url = new URL(getString(R.string.url_fortune));// + hex);
+				URL url = new URL(getString(R.string.url_fortune));
 
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.setRequestMethod("GET");
@@ -176,28 +170,21 @@ public class FortuneFragment extends Fragment {
 				InputStream inputStream = urlConnection.getInputStream();
 				StringBuffer buffer = new StringBuffer();
 				if (inputStream == null) {
-					// Nothing to do.
 					return null;
 				}
 				reader = new BufferedReader(new InputStreamReader(inputStream));
 
 				String line;
 				while ((line = reader.readLine()) != null) {
-					// Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-					// But it does make debugging a *lot* easier if you print out the completed
-					// buffer for debugging.
 					buffer.append(line + "\n");
 				}
 
 				if (buffer.length() == 0) {
-					// Stream was empty.  No point in parsing.
 					return null;
 				}
 				fortuneJsonStr = buffer.toString();
 			} catch (IOException e) {
 				Log.e("FortuneFragment", "Error ", e);
-				// If the code didn't successfully get the weather data, there's no point in attemping
-				// to parse it.
 				return null;
 			} finally {
 				if (urlConnection != null) {
@@ -247,10 +234,13 @@ public class FortuneFragment extends Fragment {
 				ArrayList<String> pro = new ArrayList<>(Arrays.asList(result[3]));
 				LangProAdapter.addAll(pro);
 
-				for (int i = 0; i < 6; i++) {
+/*Would use this Array for displaying the Lotto Numbers in place of Lotto.random() if I liked the values it returned.
+ */
+
+/*				for (int i = 0; i < 6; i++) {
 					numbers[i] = Integer.valueOf(result[i + 4]);
 				}
-
+*/
 				LottoAdapter.clear();
 				ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
 				LottoAdapter.addAll(lottoNumbers);
@@ -261,5 +251,3 @@ public class FortuneFragment extends Fragment {
 	}
 
 }
-
-

@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class Lotto {
 
-		//private static String[] ns = new String[6];
+	//private static String[] ns = new String[6];
 
 	public static String[] random() {
 		int[] n = new int[6];
@@ -31,7 +31,7 @@ public class Lotto {
 		return sort(n);
 	}
 
-	public static String[] sort(int[] numbers){
+	public static String[] sort(int[] numbers) {
 		String[] ns = new String[6];
 		int tmp;
 
