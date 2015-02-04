@@ -36,7 +36,6 @@
                 style="@style/label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:password="false"
                 android:text="@string/language_label" />
 
             <TextView
@@ -90,15 +89,15 @@
                 android:gravity="top|fill_vertical"
                 android:minHeight="64dp"
                 android:numColumns="6" />
-
-            <Button
-                android:id="@+id/lotto_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/lotto_button_text" />
-
+            <!--
+                        <Button
+                            android:id="@+id/lotto_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/lotto_button_text" />
+            -->
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

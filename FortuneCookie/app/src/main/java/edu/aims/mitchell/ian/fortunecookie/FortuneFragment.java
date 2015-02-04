@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -25,10 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-/**
- * Created by Ian on 1/20/2015.
- */
 public class FortuneFragment extends Fragment {
 
 	ArrayAdapter<String> LottoAdapter;
@@ -37,15 +35,46 @@ public class FortuneFragment extends Fragment {
 	ArrayAdapter<String> LangChiAdapter;
 	ArrayAdapter<String> LangProAdapter;
 
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		inflater.inflate(R.menu.menu_main, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+
+		//noinspection SimplifiableIfStatement
+		if (id == R.id.action_new_fortune) {
+			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
+			fortuneTask.execute();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 
-		ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(getString(R.string.fortune_text)));
-		ArrayList<String> langEng = new ArrayList<String>(Arrays.asList(getString(R.string.english_text)));
-		ArrayList<String> langChi = new ArrayList<String>(Arrays.asList(getString(R.string.chinese_text)));
-		ArrayList<String> langPro = new ArrayList<String>(Arrays.asList(getString(R.string.pro_text)));
-		ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(Lotto.random()));
+		ArrayList<String> fortune = new ArrayList<String>(Arrays.asList(""));
+		ArrayList<String> langEng = new ArrayList<String>(Arrays.asList(""));
+		ArrayList<String> langChi = new ArrayList<String>(Arrays.asList(""));
+		ArrayList<String> langPro = new ArrayList<String>(Arrays.asList(""));
+		ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(""));
 
 		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -93,15 +122,9 @@ public class FortuneFragment extends Fragment {
 		langProLinearView.setAdapter(LangProAdapter);
 		lottoGridView.setAdapter(LottoAdapter);
 
-		final Button lotto_button = (Button) rootView.findViewById(R.id.lotto_button);
-		lotto_button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
-				fortuneTask.execute();
-			}
-		});
 
+		FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
+		fortuneTask.execute();
 
 		return rootView;
 	}
@@ -113,7 +136,7 @@ public class FortuneFragment extends Fragment {
 			final String API_FOR = "fortune";
 			final String API_MES = "message";
 			final String API_LOT = "lotto";
-			final String API_NUM = "numbers";
+			//final String API_NUM = "numbers";
 			final String API_LES = "lesson";
 			final String API_ENG = "english";
 			final String API_CHI = "chinese";
