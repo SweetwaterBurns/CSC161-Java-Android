@@ -13,7 +13,6 @@
     <string name="chinese_text">有没有</string>
     <string name="pro_text">Yǒu méiyǒu</string>
     <string name="lotto_button_text">New Fortune</string>
-    <!--<string name="url_fortune">http://fortunecookieapi.com/v1/fortunes/5403c81dc2fea4020029</string>-->
     <string name="url_fortune">http://fortunecookieapi.com/v1/cookie</string>
     <string name="url_lang">http://fortunecookieapi.com/v1/lessons/</string>
 </resources>
