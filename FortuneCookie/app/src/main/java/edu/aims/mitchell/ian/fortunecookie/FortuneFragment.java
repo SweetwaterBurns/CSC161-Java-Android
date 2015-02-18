@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FortuneDetailFragment extends Fragment {
+public class FortuneFragment extends Fragment {
 
 	ArrayAdapter<String> LottoAdapter;
 	ArrayAdapter<String> FortuneAdapter;
@@ -76,7 +76,7 @@ public class FortuneDetailFragment extends Fragment {
 		ArrayList<String> langPro = new ArrayList<String>(Arrays.asList(""));
 		ArrayList<String> lottoNumbers = new ArrayList<String>(Arrays.asList(""));
 
-		View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 		FortuneAdapter =
 				new ArrayAdapter<String>(
@@ -207,7 +207,7 @@ public class FortuneDetailFragment extends Fragment {
 				}
 				fortuneJsonStr = buffer.toString();
 			} catch (IOException e) {
-				Log.e("FortuneDetailFragment", "Error ", e);
+				Log.e("FortuneFragment", "Error ", e);
 				return null;
 			} finally {
 				if (urlConnection != null) {
@@ -217,7 +217,7 @@ public class FortuneDetailFragment extends Fragment {
 					try {
 						reader.close();
 					} catch (final IOException e) {
-						Log.e("FortuneDetailFragment", "Error closing stream", e);
+						Log.e("FortuneFragment", "Error closing stream", e);
 					}
 				}
 			}
