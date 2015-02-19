@@ -62,6 +62,7 @@ public class FortuneDetailFragment extends Fragment {
 			fs.setArguments(bCurrentFortune);
 
 			getFragmentManager().beginTransaction()
+					.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
 					.replace(R.id.container, fs)
 					.commit();
 		}
