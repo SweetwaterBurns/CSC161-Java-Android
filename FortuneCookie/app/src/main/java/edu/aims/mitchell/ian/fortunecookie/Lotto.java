@@ -2,9 +2,6 @@ package edu.aims.mitchell.ian.fortunecookie;
 
 import java.util.Random;
 
-/**
- * Created by Ian on 1/19/2015.
- */
 public class Lotto {
 
 	public static String[] random() {

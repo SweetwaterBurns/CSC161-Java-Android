@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Fortune Cookie</string>
     <string name="app_new_fortune">New Fortune</string>
     <string name="fortune_label">Fortune:</string>
@@ -9,4 +10,10 @@
     <string name="pro_label">Pronunciation:</string>
     <string name="lotto_label">Lucky Numbers:</string>
     <string name="url_fortune">http://fortunecookieapi.com/v1/cookie</string>
+    <string name="title_activity_fortune_detail">Detailed Fortune</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="get_detailed_fortune">See Detailed Fortune</string>
+    <string name="get_simple_fortune">See Simple Fortune</string>
+
 </resources>
