@@ -13,11 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FortuneDetailFragment extends Fragment {
+public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 	ArrayAdapter<String> LottoAdapter;
 	ArrayAdapter<String> FortuneAdapter;
@@ -54,7 +55,6 @@ public class FortuneDetailFragment extends Fragment {
 		}
 
 		if (id == R.id.action_fortune_simple) {
-
 			Bundle bCurrentFortune = new Bundle();
 			bCurrentFortune.putStringArray("currentFortune", currentFortune);
 			FortuneSimpleFragment fs = new FortuneSimpleFragment();
@@ -62,7 +62,7 @@ public class FortuneDetailFragment extends Fragment {
 			fs.setArguments(bCurrentFortune);
 
 			getFragmentManager().beginTransaction()
-					.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 					.replace(R.id.container, fs)
 					.commit();
 		}
@@ -75,7 +75,7 @@ public class FortuneDetailFragment extends Fragment {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-
+		new Shaker(getActivity(), 2.0d, 0, FortuneDetailFragment.this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		ArrayList<String> langEng = new ArrayList<>(Arrays.asList(""));
@@ -168,6 +168,18 @@ public class FortuneDetailFragment extends Fragment {
 		LottoAdapter.clear();
 		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(numbers));
 		LottoAdapter.addAll(lottoNumbers);
+
+	}
+
+	public void shakingStarted() {
+		int duration = Toast.LENGTH_SHORT;
+		Toast.makeText(getActivity(), R.string.toast_shake, duration).show();
+		FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
+		fortuneTask.execute();
+	}
+
+	@Override
+	public void shakingStopped() {
 
 	}
 

@@ -1,6 +1,5 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FortuneSimpleFragment extends Fragment {
-
+public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 	ArrayAdapter<String> FortuneAdapter;
 	String[] currentFortune;// = {"Test Fortune", "Test English", "Test Chinese", "Test Pron", "1", "2", "3", "4", "5", "6"};
@@ -56,7 +55,7 @@ public class FortuneSimpleFragment extends Fragment {
 			fd.setArguments(bCurrentFortune);
 
 			getFragmentManager().beginTransaction()
-					.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 					.replace(R.id.container, fd)
 					.commit();
 		}
@@ -69,6 +68,7 @@ public class FortuneSimpleFragment extends Fragment {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
+		new Shaker(getActivity(), 2.0d, 0, FortuneSimpleFragment.this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		View rootView = inflater.inflate(R.layout.fragment_simple, container, false);
@@ -105,23 +105,32 @@ public class FortuneSimpleFragment extends Fragment {
 		FortuneAdapter.addAll(fortune);
 	}
 
-	private class FortuneAsyncTask extends AsyncTask<Void, Void, String[]> {
+	@Override
+	public void shakingStarted() {
+		int duration = Toast.LENGTH_SHORT;
+		Toast.makeText(getActivity(), R.string.toast_shake, duration).show();
+		FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
+		fortuneTask.execute();
+	}
+
+	@Override
+	public void shakingStopped() {
+	}
+
+	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, String[]> {
 
 		@Override
 		protected String[] doInBackground(Void... params) {
 			return UpdateFortune.Get(getString(R.string.url_fortune));
 		}
 
-
 		protected void onPostExecute(String[] result) {
-
 			if (result != null) {
-
 				currentFortune = result;
 				Refresh();
 			}
-			Refresh();
-
 		}
 	}
+
 }
+

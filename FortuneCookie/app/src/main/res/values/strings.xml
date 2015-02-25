@@ -15,5 +15,6 @@
     <string name="action_settings">Settings</string>
     <string name="get_detailed_fortune">See Detailed Fortune</string>
     <string name="get_simple_fortune">See Simple Fortune</string>
+    <string name="toast_shake">Shake it off</string>
 
 </resources>
