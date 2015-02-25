@@ -75,7 +75,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-		new Shaker(getActivity(), 2.0d, 0, FortuneDetailFragment.this);
+		new Shaker(getActivity(), 2.0d, 0, this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		ArrayList<String> langEng = new ArrayList<>(Arrays.asList(""));

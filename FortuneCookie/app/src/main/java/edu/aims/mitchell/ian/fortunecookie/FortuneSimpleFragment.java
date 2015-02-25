@@ -68,7 +68,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-		new Shaker(getActivity(), 2.0d, 0, FortuneSimpleFragment.this);
+		new Shaker(getActivity(), 2.0d, 0, this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		View rootView = inflater.inflate(R.layout.fragment_simple, container, false);
@@ -91,7 +91,6 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 			}
 			Refresh();
 		} else if (currentFortune == null) {
-
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
