@@ -1,18 +1,27 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_new_fortune"
-        android:icon="@drawable/ic_refresh"
-        android:orderInCategory="100"
-        android:title="@string/app_new_fortune"
-        android:titleCondensed=""
-        app:showAsAction="ifRoom"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/action_fortune_simple"
         android:icon="@drawable/ic_get_simple"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="@string/get_simple_fortune"
-        app:showAsAction="ifRoom"
+        android:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/action_new_fortune"
+        android:icon="@drawable/ic_refresh"
+        android:orderInCategory="2"
+        android:title="@string/app_new_fortune"
+        android:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/menu_item_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@drawable/ic_action_share"
+        android:orderInCategory="3"
+        android:title="@string/share_fortune"
+        android:showAsAction="ifRoom"
         />
 </menu>

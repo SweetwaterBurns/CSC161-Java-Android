@@ -1,7 +1,8 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,12 +20,21 @@ import java.util.Arrays;
 
 public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
+	Intent fortuneShare = new Intent();
+	ShareActionProvider mShareActionProvider;// = new ShareActionProvider(getActivity());
 	ArrayAdapter<String> FortuneAdapter;
-	String[] currentFortune;// = {"Test Fortune", "Test English", "Test Chinese", "Test Pron", "1", "2", "3", "4", "5", "6"};
+	String[] currentFortune;// = {"", "", "", "", "", "", "", "", "", ""};
+	Boolean readPassedData = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			currentFortune = savedInstanceState.getStringArray("Current Fortune");
+			Log.d("Restored State", currentFortune[0]);
+		}
+
 		setHasOptionsMenu(true);
 	}
 
@@ -31,6 +42,14 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		inflater.inflate(R.menu.menu_simple, menu);
+		MenuItem item = menu.findItem(R.id.menu_item_share);
+		mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+		fortuneShare.setAction(Intent.ACTION_SEND);
+		fortuneShare.setType("text/plain");
+		if (currentFortune != null) {
+			fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+		}
+		setShare(fortuneShare);
 	}
 
 	@Override
@@ -55,10 +74,13 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 			fd.setArguments(bCurrentFortune);
 
 			getFragmentManager().beginTransaction()
-					.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 					.replace(R.id.container, fd)
 					.commit();
 		}
+
+		//if (id == R.id.menu_item_share){}
+
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -68,7 +90,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-		new Shaker(getActivity(), 2.0d, 0, this);
+		new Shaker(getActivity(), 2.0d, 750, this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		View rootView = inflater.inflate(R.layout.fragment_simple, container, false);
@@ -84,7 +106,10 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 		fortuneLinearView.setAdapter(FortuneAdapter);
 
-		if (bCurrentFortune != null) {
+		if (currentFortune != null) {
+			Refresh();
+		} else if (bCurrentFortune != null && readPassedData == false) {
+			readPassedData = true;
 			currentFortune = bCurrentFortune.getStringArray("currentFortune");
 			for (int i = 0; i < 10; i++) {
 				Log.d("Passed Fortune " + i + ": ", currentFortune[i]);
@@ -94,14 +119,17 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
-
 		return rootView;
 	}
 
 	private void Refresh() {
+
 		FortuneAdapter.clear();
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune[0]));
 		FortuneAdapter.addAll(fortune);
+
+		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+		setShare(fortuneShare);
 	}
 
 	@Override
@@ -115,6 +143,21 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	@Override
 	public void shakingStopped() {
 	}
+
+	private void setShare(Intent fortuneShare) {
+		if (fortuneShare != null && mShareActionProvider != null) {
+			mShareActionProvider.setShareIntent(fortuneShare);
+		}
+
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putStringArray("Current Fortune", currentFortune);
+		Log.d("Saved State", currentFortune[0]);
+	}
+
 
 	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, String[]> {
 
@@ -130,6 +173,4 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 			}
 		}
 	}
-
 }
-
