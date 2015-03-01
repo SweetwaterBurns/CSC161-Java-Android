@@ -18,6 +18,7 @@ public class Lotto {
 				for (int j = i - 1; j >= 0; j--) {
 					if (n[i] == n[j]) {
 						match = true;
+						break;
 					}
 				}
 			} while (match);

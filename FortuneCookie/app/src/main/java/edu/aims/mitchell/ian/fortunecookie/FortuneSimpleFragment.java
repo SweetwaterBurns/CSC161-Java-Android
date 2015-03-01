@@ -23,7 +23,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	Intent fortuneShare = new Intent();
 	ShareActionProvider mShareActionProvider;// = new ShareActionProvider(getActivity());
 	ArrayAdapter<String> FortuneAdapter;
-	String[] currentFortune;// = {"", "", "", "", "", "", "", "", "", ""};
+	Fortune currentFortune = new Fortune();
 	Boolean readPassedData = false;
 
 	@Override
@@ -31,8 +31,8 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 		super.onCreate(savedInstanceState);
 
 		if (savedInstanceState != null) {
-			currentFortune = savedInstanceState.getStringArray("Current Fortune");
-			Log.d("Restored State", currentFortune[0]);
+			currentFortune = savedInstanceState.getParcelable("Current Fortune");
+			Log.d("Restored State", currentFortune.fortune);
 		}
 
 		setHasOptionsMenu(true);
@@ -47,7 +47,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 		fortuneShare.setAction(Intent.ACTION_SEND);
 		fortuneShare.setType("text/plain");
 		if (currentFortune != null) {
-			fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+			fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		}
 		setShare(fortuneShare);
 	}
@@ -68,7 +68,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 		if (id == R.id.action_fortune_detail) {
 			Bundle bCurrentFortune = new Bundle();
-			bCurrentFortune.putStringArray("currentFortune", currentFortune);
+			bCurrentFortune.putParcelable("currentFortune", currentFortune);
 			FortuneDetailFragment fd = new FortuneDetailFragment();
 
 			fd.setArguments(bCurrentFortune);
@@ -106,16 +106,16 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 		fortuneLinearView.setAdapter(FortuneAdapter);
 
-		if (currentFortune != null) {
+		if (currentFortune.fortune != "") {
 			Refresh();
 		} else if (bCurrentFortune != null && readPassedData == false) {
 			readPassedData = true;
-			currentFortune = bCurrentFortune.getStringArray("currentFortune");
-			for (int i = 0; i < 10; i++) {
-				Log.d("Passed Fortune " + i + ": ", currentFortune[i]);
-			}
+			currentFortune = bCurrentFortune.getParcelable("currentFortune");
+
+				Log.d("Passed Fortune: ", currentFortune.fortune);
+
 			Refresh();
-		} else if (currentFortune == null) {
+		} else if (currentFortune.fortune == "") {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
@@ -125,10 +125,10 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	private void Refresh() {
 
 		FortuneAdapter.clear();
-		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune[0]));
+		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune.fortune));
 		FortuneAdapter.addAll(fortune);
 
-		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		setShare(fortuneShare);
 	}
 
@@ -154,21 +154,21 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putStringArray("Current Fortune", currentFortune);
-		Log.d("Saved State", currentFortune[0]);
+		savedInstanceState.putParcelable("Current Fortune", currentFortune);
+		Log.d("Saved State", currentFortune.fortune);
 	}
 
 
-	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, String[]> {
+	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected String[] doInBackground(Void... params) {
-			return UpdateFortune.Get(getString(R.string.url_fortune));
+		protected Void doInBackground (Void... params) {
+			currentFortune.Get(getString(R.string.url_fortune));
+			return null;
 		}
 
-		protected void onPostExecute(String[] result) {
-			if (result != null) {
-				currentFortune = result;
+		protected void onPostExecute(Void v) {
+			if (currentFortune != null) {
 				Refresh();
 			}
 		}

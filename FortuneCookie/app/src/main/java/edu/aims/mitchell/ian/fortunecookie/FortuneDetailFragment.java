@@ -23,12 +23,14 @@ import java.util.Arrays;
 public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 	ArrayAdapter<String> LottoAdapter;
+
 	ArrayAdapter<String> FortuneAdapter;
 	ArrayAdapter<String> LangEngAdapter;
 	ArrayAdapter<String> LangChiAdapter;
 	ArrayAdapter<String> LangProAdapter;
-	String[] currentFortune;// = {"", "", "", "", "", "", "", "", "", ""};
-	ShareActionProvider mShareActionProvider;// = new ShareActionProvider(getActivity());
+
+	Fortune currentFortune = new Fortune();
+	ShareActionProvider mShareActionProvider;
 	Intent fortuneShare = new Intent();
 	Boolean readPassedData = false;
 
@@ -37,8 +39,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		super.onCreate(savedInstanceState);
 
 		if (savedInstanceState != null) {
-			currentFortune = savedInstanceState.getStringArray("Current Fortune");
-			Log.d("Restored State", currentFortune[0]);
+			currentFortune = savedInstanceState.getParcelable("Current Fortune");
 		}
 
 		setHasOptionsMenu(true);
@@ -53,8 +54,8 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		//Intent fortuneShare = new Intent();
 		fortuneShare.setAction(Intent.ACTION_SEND);
 		fortuneShare.setType("text/plain");
-		if (currentFortune != null) {
-			fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+		if (currentFortune.fortune != "") {
+			fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		}
 		setShare(fortuneShare);
 	}
@@ -76,7 +77,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		if (id == R.id.action_fortune_simple) {
 			Bundle bCurrentFortune = new Bundle();
-			bCurrentFortune.putStringArray("currentFortune", currentFortune);
+			bCurrentFortune.putParcelable("currentFortune", currentFortune);
 			FortuneSimpleFragment fs = new FortuneSimpleFragment();
 
 			fs.setArguments(bCurrentFortune);
@@ -105,13 +106,13 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+
 		FortuneAdapter =
 				new ArrayAdapter<>(
 						getActivity(),
 						R.layout.text_detail,
 						R.id.text_detail_textview,
 						fortune);
-
 		LangEngAdapter =
 				new ArrayAdapter<>(
 						getActivity(),
@@ -130,6 +131,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 						R.layout.text_detail,
 						R.id.text_detail_textview,
 						langPro);
+
 		LottoAdapter =
 				new ArrayAdapter<>(
 						getActivity(),
@@ -142,23 +144,20 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		ListView langChiLinearView = (ListView) rootView.findViewById(R.id.lang_chi_view);
 		ListView langProLinearView = (ListView) rootView.findViewById(R.id.lang_pro_view);
 		GridView lottoGridView = (GridView) rootView.findViewById(R.id.lotto_numbers);
-
 		fortuneLinearView.setAdapter(FortuneAdapter);
 		langEngLinearView.setAdapter(LangEngAdapter);
 		langChiLinearView.setAdapter(LangChiAdapter);
 		langProLinearView.setAdapter(LangProAdapter);
 		lottoGridView.setAdapter(LottoAdapter);
 
-		if (currentFortune != null) {
+		if (currentFortune.fortune != "") {
 			Refresh();
 		} else if (bCurrentFortune != null && readPassedData == false) {
 			readPassedData = true;
-			currentFortune = bCurrentFortune.getStringArray("currentFortune");
-			for (int i = 0; i < 10; i++) {
-				Log.d("Passed Fortune " + i + ": ", currentFortune[i]);
-			}
+			currentFortune = bCurrentFortune.getParcelable("currentFortune");
+			Log.d("Passed Fortune: ", currentFortune.fortune);
 			Refresh();
-		} else if (currentFortune == null) {
+		} else if (currentFortune.fortune == "") {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
@@ -167,31 +166,29 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 	private void Refresh() {
 
-		String[] numbers = new String[6];
-
-		System.arraycopy(currentFortune, 4, numbers, 0, 6);
+		Log.d("Fortune to Display: ", currentFortune.fortune);
 
 		FortuneAdapter.clear();
-		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune[0]));
+		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune.fortune));
 		FortuneAdapter.addAll(fortune);
 
 		LangEngAdapter.clear();
-		ArrayList<String> english = new ArrayList<>(Arrays.asList(currentFortune[1]));
+		ArrayList<String> english = new ArrayList<>(Arrays.asList(currentFortune.english));
 		LangEngAdapter.addAll(english);
 
 		LangChiAdapter.clear();
-		ArrayList<String> chinese = new ArrayList<>(Arrays.asList(currentFortune[2]));
+		ArrayList<String> chinese = new ArrayList<>(Arrays.asList(currentFortune.chinese));
 		LangChiAdapter.addAll(chinese);
 
 		LangProAdapter.clear();
-		ArrayList<String> pro = new ArrayList<>(Arrays.asList(currentFortune[3]));
+		ArrayList<String> pro = new ArrayList<>(Arrays.asList(currentFortune.pro));
 		LangProAdapter.addAll(pro);
 
 		LottoAdapter.clear();
-		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(numbers));
+		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(currentFortune.lotto));
 		LottoAdapter.addAll(lottoNumbers);
 
-		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune[0]);
+		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		setShare(fortuneShare);
 	}
 
@@ -218,23 +215,23 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putStringArray("Current Fortune", currentFortune);
-		Log.d("Saved State", currentFortune[0]);
+		savedInstanceState.putParcelable("Current Fortune", currentFortune);
+		Log.d("Saved State", currentFortune.fortune);
 
 	}
 
-	public class FortuneAsyncTask extends AsyncTask<Void, Void, String[]> {
+	public class FortuneAsyncTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected String[] doInBackground(Void... params) {
-			return UpdateFortune.Get(getString(R.string.url_fortune));
+		protected Void doInBackground(Void... params) {
+			currentFortune.Get(getString(R.string.url_fortune));
+			return null;
 		}
 
 
-		protected void onPostExecute(String[] result) {
+		protected void onPostExecute(Void V) {
 
-			if (result != null) {
-				currentFortune = result;
+			if (currentFortune.fortune != "") {
 				Refresh();
 			}
 		}

@@ -2,13 +2,4 @@
 <TextView
     android:id="@+id/text_detail_textview"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#afffffff"
-    android:gravity="right"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:textColor="#000"
-    android:textSize="16dp"
-    android:textStyle="italic"
-    />
+    style="@style/style_fortune_detail"/>
