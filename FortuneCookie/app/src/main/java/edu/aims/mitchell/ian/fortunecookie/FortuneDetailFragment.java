@@ -28,6 +28,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	ShareActionProvider mShareActionProvider;
 	Intent fortuneShare = new Intent();
 	Boolean readPassedData = false;
+	Shaker shaker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-		new Shaker(getActivity(), 2.0d, 750, this);
+		shaker = new Shaker(getActivity(), 2.0d, 750, this);
 
 		ArrayList<Fortune> fortune = new ArrayList<>(new Fortune().asList());
 		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(""));
@@ -190,5 +191,17 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 				Refresh();
 			}
 		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		shaker.close();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		shaker.close();
 	}
 }

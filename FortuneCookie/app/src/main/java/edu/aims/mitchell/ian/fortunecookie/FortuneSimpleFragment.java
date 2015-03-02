@@ -25,6 +25,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	ArrayAdapter<String> FortuneAdapter;
 	Fortune currentFortune = new Fortune();
 	Boolean readPassedData = false;
+Shaker shaker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	                         Bundle savedInstanceState) {
 
 		Bundle bCurrentFortune = getArguments();
-		new Shaker(getActivity(), 2.0d, 750, this);
+		shaker = new Shaker(getActivity(), 2.0d, 750, this);
 
 		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
 		View rootView = inflater.inflate(R.layout.fragment_simple, container, false);
@@ -172,5 +173,17 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 				Refresh();
 			}
 		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		shaker.close();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		shaker.close();
 	}
 }
