@@ -4,16 +4,16 @@
         android:id="@+id/action_fortune_simple"
         android:icon="@drawable/ic_get_simple"
         android:orderInCategory="1"
-        android:title="@string/get_simple_fortune"
         android:showAsAction="ifRoom"
+        android:title="@string/get_simple_fortune"
         />
 
     <item
         android:id="@+id/action_new_fortune"
         android:icon="@drawable/ic_refresh"
         android:orderInCategory="2"
-        android:title="@string/app_new_fortune"
         android:showAsAction="ifRoom"
+        android:title="@string/app_new_fortune"
         />
 
     <item
@@ -21,7 +21,7 @@
         android:actionProviderClass="android.widget.ShareActionProvider"
         android:icon="@drawable/ic_action_share"
         android:orderInCategory="3"
-        android:title="@string/share_fortune"
         android:showAsAction="ifRoom"
+        android:title="@string/share_fortune"
         />
 </menu>

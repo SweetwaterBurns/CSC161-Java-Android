@@ -26,19 +26,12 @@ public class Fortune implements Parcelable {
 
 
 	public Fortune() {
-		this.fortune = "";
-		this.english = "";
-		this.chinese = "";
-		this.pro = "";
-		this.lotto = new String[6];
-	}
-
-	public Fortune(String fortune, String english, String chinese, String pro, String[] lotto) {
-		this.fortune = fortune;
-		this.english = english;
-		this.chinese = chinese;
-		this.pro = pro;
-		this.lotto = lotto;
+		this.fortune = "Cause the players gonna play, play, play\n" +
+				"And the haters gonna hate, hate, hate";
+		this.english = "Heartbreakers gonna break, break, break";
+		this.chinese = "和伪装者要去假的，假的，假的";
+		this.pro = "Baby I'm just gonna...";
+		this.lotto = new String[]{"play", "hate", "shake", "break", "fake", "shake"};
 	}
 
 	public Fortune(Parcel in) {
@@ -153,5 +146,4 @@ public class Fortune implements Parcelable {
 		dest.writeString(this.pro);
 		dest.writeStringArray(this.lotto);
 	}
-
 }

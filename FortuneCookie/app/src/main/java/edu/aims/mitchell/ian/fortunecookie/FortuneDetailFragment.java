@@ -23,12 +23,7 @@ import java.util.Arrays;
 public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 	ArrayAdapter<String> LottoAdapter;
-
-	ArrayAdapter<String> FortuneAdapter;
-	ArrayAdapter<String> LangEngAdapter;
-	ArrayAdapter<String> LangChiAdapter;
-	ArrayAdapter<String> LangProAdapter;
-
+	FortuneAdapter fortuneAdapter;
 	Fortune currentFortune = new Fortune();
 	ShareActionProvider mShareActionProvider;
 	Intent fortuneShare = new Intent();
@@ -98,39 +93,11 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		Bundle bCurrentFortune = getArguments();
 		new Shaker(getActivity(), 2.0d, 750, this);
 
-		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(""));
-		ArrayList<String> langEng = new ArrayList<>(Arrays.asList(""));
-		ArrayList<String> langChi = new ArrayList<>(Arrays.asList(""));
-		ArrayList<String> langPro = new ArrayList<>(Arrays.asList(""));
+		ArrayList<Fortune> fortune = new ArrayList<>(new Fortune().asList());
 		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(""));
 
 		View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-
-		FortuneAdapter =
-				new ArrayAdapter<>(
-						getActivity(),
-						R.layout.text_detail,
-						R.id.text_detail_textview,
-						fortune);
-		LangEngAdapter =
-				new ArrayAdapter<>(
-						getActivity(),
-						R.layout.text_detail,
-						R.id.text_detail_textview,
-						langEng);
-		LangChiAdapter =
-				new ArrayAdapter<>(
-						getActivity(),
-						R.layout.text_detail,
-						R.id.text_detail_textview,
-						langChi);
-		LangProAdapter =
-				new ArrayAdapter<>(
-						getActivity(),
-						R.layout.text_detail,
-						R.id.text_detail_textview,
-						langPro);
 
 		LottoAdapter =
 				new ArrayAdapter<>(
@@ -139,16 +106,16 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 						R.id.lotto_textview,
 						lottoNumbers);
 
-		ListView fortuneLinearView = (ListView) rootView.findViewById(R.id.fortune_detail_view);
-		ListView langEngLinearView = (ListView) rootView.findViewById(R.id.lang_eng_view);
-		ListView langChiLinearView = (ListView) rootView.findViewById(R.id.lang_chi_view);
-		ListView langProLinearView = (ListView) rootView.findViewById(R.id.lang_pro_view);
+		fortuneAdapter =
+				new FortuneAdapter(
+						getActivity(),
+						fortune);
+
+		ListView fortuneListView = (ListView) rootView.findViewById(R.id.listview_fortune_detail);
 		GridView lottoGridView = (GridView) rootView.findViewById(R.id.lotto_numbers);
-		fortuneLinearView.setAdapter(FortuneAdapter);
-		langEngLinearView.setAdapter(LangEngAdapter);
-		langChiLinearView.setAdapter(LangChiAdapter);
-		langProLinearView.setAdapter(LangProAdapter);
+
 		lottoGridView.setAdapter(LottoAdapter);
+		fortuneListView.setAdapter(fortuneAdapter);
 
 		if (currentFortune.fortune != "") {
 			Refresh();
@@ -161,6 +128,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
+
 		return rootView;
 	}
 
@@ -168,25 +136,13 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		Log.d("Fortune to Display: ", currentFortune.fortune);
 
-		FortuneAdapter.clear();
-		ArrayList<String> fortune = new ArrayList<>(Arrays.asList(currentFortune.fortune));
-		FortuneAdapter.addAll(fortune);
-
-		LangEngAdapter.clear();
-		ArrayList<String> english = new ArrayList<>(Arrays.asList(currentFortune.english));
-		LangEngAdapter.addAll(english);
-
-		LangChiAdapter.clear();
-		ArrayList<String> chinese = new ArrayList<>(Arrays.asList(currentFortune.chinese));
-		LangChiAdapter.addAll(chinese);
-
-		LangProAdapter.clear();
-		ArrayList<String> pro = new ArrayList<>(Arrays.asList(currentFortune.pro));
-		LangProAdapter.addAll(pro);
-
 		LottoAdapter.clear();
 		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(currentFortune.lotto));
 		LottoAdapter.addAll(lottoNumbers);
+
+		fortuneAdapter.clear();
+		ArrayList<Fortune> fortune = new ArrayList<>(currentFortune.asList());
+		fortuneAdapter.addAll(fortune);
 
 		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		setShare(fortuneShare);
@@ -217,7 +173,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		super.onSaveInstanceState(savedInstanceState);
 		savedInstanceState.putParcelable("Current Fortune", currentFortune);
 		Log.d("Saved State", currentFortune.fortune);
-
 	}
 
 	public class FortuneAsyncTask extends AsyncTask<Void, Void, Void> {

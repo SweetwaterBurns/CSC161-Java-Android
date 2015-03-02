@@ -112,7 +112,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 			readPassedData = true;
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 
-				Log.d("Passed Fortune: ", currentFortune.fortune);
+			Log.d("Passed Fortune: ", currentFortune.fortune);
 
 			Refresh();
 		} else if (currentFortune.fortune == "") {
@@ -162,7 +162,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected Void doInBackground (Void... params) {
+		protected Void doInBackground(Void... params) {
 			currentFortune.Get(getString(R.string.url_fortune));
 			return null;
 		}
