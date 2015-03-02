@@ -106,9 +106,9 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 		fortuneLinearView.setAdapter(FortuneAdapter);
 
-		if (currentFortune.fortune != "") {
-			Refresh();
-		} else if (bCurrentFortune != null && readPassedData == false) {
+		Refresh();
+
+		if (bCurrentFortune != null && readPassedData == false) {
 			readPassedData = true;
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 

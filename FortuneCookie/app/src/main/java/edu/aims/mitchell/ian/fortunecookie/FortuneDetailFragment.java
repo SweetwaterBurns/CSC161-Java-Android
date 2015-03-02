@@ -117,9 +117,9 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		lottoGridView.setAdapter(LottoAdapter);
 		fortuneListView.setAdapter(fortuneAdapter);
 
-		if (currentFortune.fortune != "") {
-			Refresh();
-		} else if (bCurrentFortune != null && readPassedData == false) {
+		Refresh();
+
+		if (bCurrentFortune != null && readPassedData == false) {
 			readPassedData = true;
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 			Log.d("Passed Fortune: ", currentFortune.fortune);
