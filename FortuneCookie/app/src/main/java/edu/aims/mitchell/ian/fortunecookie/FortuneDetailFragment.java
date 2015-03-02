@@ -27,7 +27,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	Fortune currentFortune = new Fortune();
 	ShareActionProvider mShareActionProvider;
 	Intent fortuneShare = new Intent();
-	Boolean readPassedData = false;
 	Shaker shaker;
 
 	@Override
@@ -78,9 +77,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 			fs.setArguments(bCurrentFortune);
 
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fs)
-					.commit();
+			getFragmentManager().popBackStackImmediate("Simple", getFragmentManager().POP_BACK_STACK_INCLUSIVE);
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -120,8 +117,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		Refresh();
 
-		if (bCurrentFortune != null && readPassedData == false) {
-			readPassedData = true;
+		if (bCurrentFortune != null) {
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 			Log.d("Passed Fortune: ", currentFortune.fortune);
 			Refresh();
@@ -176,6 +172,18 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		Log.d("Saved State", currentFortune.fortune);
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		shaker.close();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		shaker.close();
+	}
+
 	public class FortuneAsyncTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -191,17 +199,5 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 				Refresh();
 			}
 		}
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		shaker.close();
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		shaker.close();
 	}
 }

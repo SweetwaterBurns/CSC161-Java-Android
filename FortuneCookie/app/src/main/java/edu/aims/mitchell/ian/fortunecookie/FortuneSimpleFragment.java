@@ -24,8 +24,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	ShareActionProvider mShareActionProvider;// = new ShareActionProvider(getActivity());
 	ArrayAdapter<String> FortuneAdapter;
 	Fortune currentFortune = new Fortune();
-	Boolean readPassedData = false;
-Shaker shaker;
+	Shaker shaker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,9 @@ Shaker shaker;
 			fd.setArguments(bCurrentFortune);
 
 			getFragmentManager().beginTransaction()
+					//.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
 					.replace(R.id.container, fd)
+					.addToBackStack("Simple")
 					.commit();
 		}
 
@@ -109,12 +110,9 @@ Shaker shaker;
 
 		Refresh();
 
-		if (bCurrentFortune != null && readPassedData == false) {
-			readPassedData = true;
+		if (bCurrentFortune != null) {
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
-
 			Log.d("Passed Fortune: ", currentFortune.fortune);
-
 			Refresh();
 		} else if (currentFortune.fortune == "") {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
@@ -159,6 +157,17 @@ Shaker shaker;
 		Log.d("Saved State", currentFortune.fortune);
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		shaker.close();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		shaker.close();
+	}
 
 	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
 
@@ -173,17 +182,5 @@ Shaker shaker;
 				Refresh();
 			}
 		}
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		shaker.close();
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		shaker.close();
 	}
 }
