@@ -28,8 +28,8 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	ShareActionProvider mShareActionProvider;
 	Intent fortuneShare = new Intent();
 	Shaker shaker;
+	DatabaseHelper dbhelper;
 
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -90,6 +90,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		Bundle bCurrentFortune = getArguments();
 		shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		dbhelper = new DatabaseHelper(getActivity());
 
 		ArrayList<Fortune> fortune = new ArrayList<>(new Fortune().asList());
 		ArrayList<String> lottoNumbers = new ArrayList<>(Arrays.asList(""));
@@ -194,8 +195,8 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 
 		protected void onPostExecute(Void V) {
-
 			if (currentFortune.fortune != "") {
+				dbhelper.add(currentFortune);
 				Refresh();
 			}
 		}

@@ -2,9 +2,11 @@
 <manifest
     package="edu.aims.mitchell.ian.fortunecookie"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="33">
+    android:versionCode="40">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
