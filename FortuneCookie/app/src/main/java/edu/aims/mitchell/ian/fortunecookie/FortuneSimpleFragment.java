@@ -75,7 +75,6 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		if (id == R.id.action_new_fortune) {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
-			return true;
 		}
 
 		if (id == R.id.action_fortune_detail) {
@@ -92,8 +91,11 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 					.commit();
 		}
 
-		//if (id == R.id.menu_item_share){}
 
+		if (id == R.id.menu_item_save) {
+			dbhelper.add(currentFortune);
+			Toast.makeText(getActivity(), getString(R.string.fortune_saved), Toast.LENGTH_SHORT).show();
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -121,8 +123,6 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 
 		fortuneLinearView.setAdapter(FortuneAdapter);
 
-		Refresh();
-
 		if (bCurrentFortune != null) {
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 			Log.d("Passed Fortune: ", currentFortune.fortune);
@@ -130,6 +130,8 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		} else if (currentFortune.fortune == "") {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
+		} else {
+			Refresh();
 		}
 		return rootView;
 	}
@@ -146,8 +148,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 
 	@Override
 	public void shakingStarted() {
-		int duration = Toast.LENGTH_SHORT;
-		Toast.makeText(getActivity(), R.string.toast_shake, duration).show();
+		Toast.makeText(getActivity(), R.string.toast_shake, Toast.LENGTH_SHORT).show();
 		FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 		fortuneTask.execute();
 	}
@@ -183,14 +184,49 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		Log.d("In:", "onStop");
 		super.onStop();
 		shaker.close();
+		mGoogleApiClient.disconnect();
 	}
 
 	@Override
-	public void onStart(){
+	public void onStart() {
 		Log.d("In:", "onStart");
 		super.onStart();
 		shaker = new Shaker(getActivity(), 2.0d, 750, this);
 		mGoogleApiClient.connect();
+	}
+
+	@Override
+	public void onConnected(Bundle bundle) {
+
+		Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		if (mLastLocation != null) {
+			currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
+			currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
+			Log.d("Bundle Latitude: ", currentFortune.lat);
+			Log.d("Bundle Longitude: ", currentFortune.lon);
+		} else if (mLastLocation == null) {
+			Log.d("mLastLocation", " = null");
+		}
+		Log.d("FortuneFragmentSimple.", "onConnected");
+	}
+
+	@Override
+	public void onConnectionSuspended(int i) {
+		Log.d("FortuneFragmentSimple.", "onConnectionSuspended");
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		Log.d("FortuneFragmentSimple", " Connection Failed");
+	}
+
+	protected synchronized void buildGoogleApiClient(Context ctx) {
+		mGoogleApiClient = new GoogleApiClient.Builder(ctx)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this)
+				.addApi(LocationServices.API)
+				.build();
+		Log.d("buildGoogleApiClient", "Client Created");
 	}
 
 	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
@@ -203,63 +239,9 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 
 		protected void onPostExecute(Void v) {
 			if (currentFortune.fortune != "") {
-
-				Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-				if (mLastLocation != null) {
-					currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
-					currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
-					Log.d("Bundle Latitude: ", currentFortune.lat);
-					Log.d("Bundle Longitude: ", currentFortune.lon);
-				} else if (mLastLocation == null) {
-					Log.d("mLastLocation", " = null");
-				}
-
-				dbhelper.add(currentFortune);
 				Refresh();
 			}
 		}
-	}
-
-
-
-	@Override
-	public void onConnected(Bundle bundle) {
-		Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-		if (mLastLocation != null) {
-			currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
-			currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
-			Log.d("Bundle Latitude: ", currentFortune.lat);
-			Log.d("Bundle Longitude: ", currentFortune.lon);
-		} else if (mLastLocation == null) {
-			Log.d("mLastLocation", " = null");
-		}
-		Log.d("FortuneFragmentSimple.","onConnected");
-	}
-
-/*	@Override
-	public void onDisconnected() {
-		Log.d("In  FortuneFragmentSimple.", "onDisconnected");
-	}
-*/
-	@Override
-	public void onConnectionSuspended(int i) {
-Log.d("FortuneFragmentSimple.","onConnectionSuspended");
-	}
-
-	@Override
-	public void onConnectionFailed(ConnectionResult connectionResult) {
-		Log.d("FortuneFragmentSimple"," Connection Failed");
-	}
-
-	protected synchronized void buildGoogleApiClient(Context ctx) {
-		mGoogleApiClient = new GoogleApiClient.Builder(ctx)
-				.addConnectionCallbacks(this)
-				.addOnConnectionFailedListener(this)
-				.addApi(LocationServices.API)
-				.build();
-		Log.d("buildGoogleApiClient", "Client Created");
 	}
 }
 

@@ -11,7 +11,7 @@ import edu.aims.mitchell.ian.fortunecookie.DatabaseContract.FortuneEntry;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database version.
 
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "fortune.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String COMMA_SEP = " , ";
@@ -23,8 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					FortuneEntry.COLUMN_NAME_CHINESE + TEXT_TYPE + COMMA_SEP +
 					FortuneEntry.COLUMN_NAME_PRO + TEXT_TYPE + COMMA_SEP +
 					FortuneEntry.COLUMN_NAME_LAT + TEXT_TYPE + COMMA_SEP +
-					FortuneEntry.COLUMN_NAME_LONG + TEXT_TYPE + COMMA_SEP +
-					FortuneEntry.COLUMN_NAME_DATE + TEXT_TYPE +
+					FortuneEntry.COLUMN_NAME_LONG + TEXT_TYPE +
 					" )";
 	private static final String SQL_DELETE_ENTRIES =
 			"DROP TABLE IF EXISTS " + FortuneEntry.TABLE_NAME;
@@ -54,18 +53,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public void add(Fortune fortune) {
 
+		Log.d("Adding Fortune to DB", "Yep");
+
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(DatabaseContract.FortuneEntry.COLUMN_NAME_FORTUNE, fortune.fortune);
-		values.put(DatabaseContract.FortuneEntry.COLUMN_NAME_ENGLISH, fortune.english);
-		values.put(DatabaseContract.FortuneEntry.COLUMN_NAME_CHINESE, fortune.chinese);
-		values.put(DatabaseContract.FortuneEntry.COLUMN_NAME_PRO, fortune.pro);
+		values.put(FortuneEntry.COLUMN_NAME_FORTUNE, fortune.fortune);
+		values.put(FortuneEntry.COLUMN_NAME_ENGLISH, fortune.english);
+		values.put(FortuneEntry.COLUMN_NAME_CHINESE, fortune.chinese);
+		values.put(FortuneEntry.COLUMN_NAME_PRO, fortune.pro);
+		values.put(FortuneEntry.COLUMN_NAME_LAT, fortune.lat);
+		values.put(FortuneEntry.COLUMN_NAME_LONG, fortune.lon);
+
 
 		db.insert(
 				DatabaseContract.FortuneEntry.TABLE_NAME,
 				null,
 				values);
 		db.close();
+
 
 	}
 }

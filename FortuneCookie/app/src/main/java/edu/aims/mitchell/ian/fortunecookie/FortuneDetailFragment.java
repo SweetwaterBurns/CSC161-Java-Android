@@ -66,8 +66,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		if (id == R.id.action_new_fortune) {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
-			return true;
-
 		}
 
 		if (id == R.id.action_fortune_simple) {
@@ -79,6 +77,12 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 			getFragmentManager().popBackStackImmediate("Simple", getFragmentManager().POP_BACK_STACK_INCLUSIVE);
 		}
+
+		if (id == R.id.menu_item_save) {
+			dbhelper.add(currentFortune);
+			Toast.makeText(getActivity(), getString(R.string.fortune_saved), Toast.LENGTH_SHORT).show();
+		}
+
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -116,15 +120,16 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		lottoGridView.setAdapter(LottoAdapter);
 		fortuneListView.setAdapter(fortuneAdapter);
 
-		Refresh();
-
 		if (bCurrentFortune != null) {
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 			Log.d("Passed Fortune: ", currentFortune.fortune);
 			Refresh();
-		} else if (currentFortune.fortune == "") {
+/*		} else if (currentFortune.fortune == "") {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
+*/
+		} else {
+			Refresh();
 		}
 
 		return rootView;
@@ -147,8 +152,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	}
 
 	public void shakingStarted() {
-		int duration = Toast.LENGTH_SHORT;
-		Toast.makeText(getActivity(), R.string.toast_shake, duration).show();
+		Toast.makeText(getActivity(), R.string.toast_shake, Toast.LENGTH_SHORT).show();
 		FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 		fortuneTask.execute();
 	}
@@ -186,7 +190,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	}
 
 	@Override
-	public void onStart(){
+	public void onStart() {
 		super.onStart();
 		shaker = new Shaker(getActivity(), 2.0d, 750, this);
 	}
@@ -202,7 +206,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 		protected void onPostExecute(Void V) {
 			if (currentFortune.fortune != "") {
-				dbhelper.add(currentFortune);
 				Refresh();
 			}
 		}

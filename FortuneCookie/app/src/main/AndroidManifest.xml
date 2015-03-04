@@ -2,7 +2,7 @@
 <manifest
     package="edu.aims.mitchell.ian.fortunecookie"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="41">
+    android:versionCode="42">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.android.gms.version"
-                   android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 </manifest>

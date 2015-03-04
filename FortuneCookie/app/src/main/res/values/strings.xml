@@ -17,5 +17,7 @@
     <string name="get_simple_fortune">See Simple Fortune</string>
     <string name="toast_shake">Shake it off</string>
     <string name="share_fortune">Share</string>
+    <string name="fortune_menu_save">Save</string>
+    <string name="fortune_saved">Fortune Saved</string>
 
 </resources>

@@ -30,7 +30,6 @@ public class Fortune implements Parcelable {
 	private GoogleApiClient mGoogleApiClient;
 
 
-
 	public Fortune() {
 		this.fortune = "Cause the players gonna play, play, play\n" +
 				"And the haters gonna hate, hate, hate";
@@ -146,6 +145,10 @@ public class Fortune implements Parcelable {
 	@Override
 	public int describeContents() {
 		return 0;
+	}
+
+	public void save(DatabaseHelper dbhelper) {
+		dbhelper.add(this);
 	}
 
 	@Override
