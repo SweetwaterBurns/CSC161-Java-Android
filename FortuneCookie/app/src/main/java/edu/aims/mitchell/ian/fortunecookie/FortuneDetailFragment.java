@@ -139,8 +139,8 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 		LottoAdapter.addAll(lottoNumbers);
 
 		fortuneAdapter.clear();
-		ArrayList<Fortune> fortune = new ArrayList<>(currentFortune.asList());
-		fortuneAdapter.addAll(fortune);
+		//ArrayList<Fortune> fortune = new ArrayList<>(currentFortune.asList());
+		fortuneAdapter.addAll(currentFortune.asList());
 
 		fortuneShare.putExtra(Intent.EXTRA_TEXT, "My Fortune:\n" + currentFortune.fortune);
 		setShare(fortuneShare);
@@ -183,6 +183,12 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	public void onStop() {
 		super.onStop();
 		shaker.close();
+	}
+
+	@Override
+	public void onStart(){
+		super.onStart();
+		shaker = new Shaker(getActivity(), 2.0d, 750, this);
 	}
 
 	public class FortuneAsyncTask extends AsyncTask<Void, Void, Void> {

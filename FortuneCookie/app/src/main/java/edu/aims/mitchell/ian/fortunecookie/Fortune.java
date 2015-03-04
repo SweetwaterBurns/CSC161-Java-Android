@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,10 @@ public class Fortune implements Parcelable {
 	public String chinese;
 	public String pro;
 	public String[] lotto;
+	public String lat;
+	public String lon;
+	private GoogleApiClient mGoogleApiClient;
+
 
 
 	public Fortune() {
@@ -32,6 +38,8 @@ public class Fortune implements Parcelable {
 		this.chinese = "和伪装者要去假的，假的，假的";
 		this.pro = "Baby I'm just gonna...";
 		this.lotto = new String[]{"play", "hate", "shake", "break", "fake", "shake"};
+		this.lat = "100";
+		this.lon = "100";
 	}
 
 	public Fortune(Parcel in) {
@@ -40,6 +48,8 @@ public class Fortune implements Parcelable {
 		this.chinese = in.readString();
 		this.pro = in.readString();
 		this.lotto = in.createStringArray();
+		this.lat = in.readString();
+		this.lon = in.readString();
 	}
 
 	private Void fortuneFromJson(String Json)
@@ -145,5 +155,7 @@ public class Fortune implements Parcelable {
 		dest.writeString(this.chinese);
 		dest.writeString(this.pro);
 		dest.writeStringArray(this.lotto);
+		dest.writeString(this.lat);
+		dest.writeString(this.lon);
 	}
 }

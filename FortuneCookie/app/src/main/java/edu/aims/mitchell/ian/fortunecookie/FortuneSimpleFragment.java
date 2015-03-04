@@ -1,7 +1,9 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +17,14 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
+public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 	Intent fortuneShare = new Intent();
 	ShareActionProvider mShareActionProvider;// = new ShareActionProvider(getActivity());
@@ -26,6 +32,8 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 	Fortune currentFortune = new Fortune();
 	Shaker shaker;
 	DatabaseHelper dbhelper;
+	GoogleApiClient mGoogleApiClient;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,9 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 		}
 
 		setHasOptionsMenu(true);
+		buildGoogleApiClient(getActivity());
+
+
 	}
 
 	@Override
@@ -161,14 +172,25 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 	@Override
 	public void onPause() {
+		Log.d("In:", "onPause");
 		super.onPause();
 		shaker.close();
+		mGoogleApiClient.disconnect();
 	}
 
 	@Override
 	public void onStop() {
+		Log.d("In:", "onStop");
 		super.onStop();
 		shaker.close();
+	}
+
+	@Override
+	public void onStart(){
+		Log.d("In:", "onStart");
+		super.onStart();
+		shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		mGoogleApiClient.connect();
 	}
 
 	private class FortuneAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
@@ -181,9 +203,63 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback {
 
 		protected void onPostExecute(Void v) {
 			if (currentFortune.fortune != "") {
+
+				Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+				if (mLastLocation != null) {
+					currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
+					currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
+					Log.d("Bundle Latitude: ", currentFortune.lat);
+					Log.d("Bundle Longitude: ", currentFortune.lon);
+				} else if (mLastLocation == null) {
+					Log.d("mLastLocation", " = null");
+				}
+
 				dbhelper.add(currentFortune);
 				Refresh();
 			}
 		}
 	}
+
+
+
+	@Override
+	public void onConnected(Bundle bundle) {
+		Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+		if (mLastLocation != null) {
+			currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
+			currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
+			Log.d("Bundle Latitude: ", currentFortune.lat);
+			Log.d("Bundle Longitude: ", currentFortune.lon);
+		} else if (mLastLocation == null) {
+			Log.d("mLastLocation", " = null");
+		}
+		Log.d("FortuneFragmentSimple.","onConnected");
+	}
+
+/*	@Override
+	public void onDisconnected() {
+		Log.d("In  FortuneFragmentSimple.", "onDisconnected");
+	}
+*/
+	@Override
+	public void onConnectionSuspended(int i) {
+Log.d("FortuneFragmentSimple.","onConnectionSuspended");
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		Log.d("FortuneFragmentSimple"," Connection Failed");
+	}
+
+	protected synchronized void buildGoogleApiClient(Context ctx) {
+		mGoogleApiClient = new GoogleApiClient.Builder(ctx)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this)
+				.addApi(LocationServices.API)
+				.build();
+		Log.d("buildGoogleApiClient", "Client Created");
+	}
 }
+
