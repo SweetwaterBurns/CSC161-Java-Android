@@ -19,5 +19,6 @@
     <string name="share_fortune">Share</string>
     <string name="fortune_menu_save">Save</string>
     <string name="fortune_saved">Fortune Saved</string>
+    <string name="load_fortune">List Old Fortunes</string>
 
 </resources>

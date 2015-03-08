@@ -2,9 +2,12 @@ package edu.aims.mitchell.ian.fortunecookie;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import edu.aims.mitchell.ian.fortunecookie.DatabaseContract.FortuneEntry;
 
@@ -71,6 +74,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				values);
 		db.close();
 
-
 	}
+
+
+	public Fortune retrieve(String fortuneid) {
+		Fortune loadedFortune = new Fortune();
+
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cur = db.query(FortuneEntry.TABLE_NAME, null, null, null, null, null, null);
+		cur.moveToPosition(Integer.getInteger(fortuneid));
+
+		loadedFortune.fortune = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_FORTUNE));
+		loadedFortune.english = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_ENGLISH));
+		loadedFortune.chinese = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_CHINESE));
+		loadedFortune.pro = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_PRO));
+		loadedFortune.lat = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LAT));
+		loadedFortune.lon = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LONG));
+
+		return loadedFortune;
+	}
+
+	public ArrayList<String> listSavedFortunes() {
+
+		Log.d("In", this.getClass().getSimpleName());
+		SQLiteDatabase db = getReadableDatabase();
+		Log.d("Loaded Database", db.getPath());
+		ArrayList<String> loadlist = new ArrayList<>();
+		String[] columns = {FortuneEntry.COLUMN_NAME_FORTUNE};
+		Cursor cur = db.query(FortuneEntry.TABLE_NAME, null, null, null, null, null, null);
+		cur.moveToFirst();
+		while (!cur.isAfterLast()) {
+			loadlist.add(cur.getString(1));
+			Log.d("Retrived Fortune", cur.getString(1));
+			cur.moveToNext();
+		}
+		db.close();
+		cur.close();
+		return loadlist;
+	}
+
 }

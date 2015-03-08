@@ -12,6 +12,7 @@ public class Shaker {
 	private SensorManager mgr = null;
 	private long lastShakeTimestamp = 0;
 	private double threshold = 1.0d;
+
 	private final SensorEventListener listener = new SensorEventListener() {
 		@Override
 		public void onSensorChanged(SensorEvent e) {

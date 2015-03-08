@@ -1,7 +1,9 @@
 package edu.aims.mitchell.ian.fortunecookie;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +19,14 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
+public class FortuneDetailFragment extends Fragment implements Shaker.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 	ArrayAdapter<String> LottoAdapter;
 	FortuneAdapter fortuneAdapter;
@@ -29,6 +35,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	Intent fortuneShare = new Intent();
 	Shaker shaker;
 	DatabaseHelper dbhelper;
+	GoogleApiClient mGoogleApiClient;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,20 +64,39 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
+		if (id != R.id.menu_item_save && id!=R.id.action_new_fortune) {
+			if (shaker != null) {
+				shaker.close();
+				shaker = null;
+			}
+			if (mGoogleApiClient != null) {
+				mGoogleApiClient.disconnect();
+				mGoogleApiClient = null;
+			}
+		}
+
+		Bundle bCurrentFortune = new Bundle();
+		bCurrentFortune.putParcelable("currentFortune", currentFortune);
+
+		if (id == R.id.menu_item_load) {
+
+			FortuneListFragment fl = new FortuneListFragment();
+
+			getFragmentManager().beginTransaction()
+					//.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+					.replace(R.id.container, fl)
+					.addToBackStack("Simple")
+					.commit();
+		}
+
 		if (id == R.id.action_new_fortune) {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
 
 		if (id == R.id.action_fortune_simple) {
-			Bundle bCurrentFortune = new Bundle();
-			bCurrentFortune.putParcelable("currentFortune", currentFortune);
 			FortuneSimpleFragment fs = new FortuneSimpleFragment();
 
 			fs.setArguments(bCurrentFortune);
@@ -124,10 +150,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 			currentFortune = bCurrentFortune.getParcelable("currentFortune");
 			Log.d("Passed Fortune: ", currentFortune.fortune);
 			Refresh();
-/*		} else if (currentFortune.fortune == "") {
-			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
-			fortuneTask.execute();
-*/
 		} else {
 			Refresh();
 		}
@@ -180,19 +202,73 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 	@Override
 	public void onPause() {
 		super.onPause();
-		shaker.close();
+		if (shaker != null) {
+			shaker.close();
+			shaker = null;
+		}
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient = null;
+		}
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		shaker.close();
+		if (shaker != null) {
+			shaker.close();
+			shaker = null;
+		}
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient = null;
+		}
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		if (shaker == null) {
+			shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		}
+		if (mGoogleApiClient == null) {
+			buildGoogleApiClient(getActivity());
+		}
+		mGoogleApiClient.connect();
+	}
+
+	@Override
+	public void onConnected(Bundle bundle) {
+
+		Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		if (mLastLocation != null) {
+			currentFortune.lat = String.valueOf(mLastLocation.getLatitude());
+			currentFortune.lon = String.valueOf(mLastLocation.getLongitude());
+			Log.d("Bundle Latitude: ", currentFortune.lat);
+			Log.d("Bundle Longitude: ", currentFortune.lon);
+		} else if (mLastLocation == null) {
+			Log.d("mLastLocation", " = null");
+		}
+		Log.d("FortuneFragmentSimple.", "onConnected");
+	}
+
+	@Override
+	public void onConnectionSuspended(int i) {
+		Log.d("FortuneFragmentSimple.", "onConnectionSuspended");
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		Log.d("FortuneFragmentSimple", " Connection Failed");
+	}
+
+	protected synchronized void buildGoogleApiClient(Context ctx) {
+		mGoogleApiClient = new GoogleApiClient.Builder(ctx)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this)
+				.addApi(LocationServices.API)
+				.build();
+		Log.d("buildGoogleApiClient", "Client Created");
 	}
 
 	public class FortuneAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -210,4 +286,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback {
 			}
 		}
 	}
+
+
 }

@@ -71,15 +71,37 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
+		if (id != R.id.menu_item_save && id!=R.id.action_new_fortune) {
+			if (shaker != null) {
+				shaker.close();
+				shaker = null;
+			}
+			if (mGoogleApiClient != null) {
+				mGoogleApiClient.disconnect();
+				mGoogleApiClient = null;
+			}
+		}
+
+		Bundle bCurrentFortune = new Bundle();
+		bCurrentFortune.putParcelable("currentFortune", currentFortune);
+
+
+		if (id == R.id.menu_item_load) {
+			FortuneListFragment fl = new FortuneListFragment();
+
+			getFragmentManager().beginTransaction()
+					//.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+					.replace(R.id.container, fl)
+					.addToBackStack("Simple")
+					.commit();
+		}
+
 		if (id == R.id.action_new_fortune) {
 			FortuneAsyncTask fortuneTask = new FortuneAsyncTask();
 			fortuneTask.execute();
 		}
 
 		if (id == R.id.action_fortune_detail) {
-			Bundle bCurrentFortune = new Bundle();
-			bCurrentFortune.putParcelable("currentFortune", currentFortune);
 			FortuneDetailFragment fd = new FortuneDetailFragment();
 
 			fd.setArguments(bCurrentFortune);
@@ -90,7 +112,6 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 					.addToBackStack("Simple")
 					.commit();
 		}
-
 
 		if (id == R.id.menu_item_save) {
 			dbhelper.add(currentFortune);
@@ -175,23 +196,40 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 	public void onPause() {
 		Log.d("In:", "onPause");
 		super.onPause();
-		shaker.close();
-		mGoogleApiClient.disconnect();
+		if (shaker != null) {
+			shaker.close();
+			shaker = null;
+		}
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient = null;
+		}
 	}
 
 	@Override
 	public void onStop() {
 		Log.d("In:", "onStop");
 		super.onStop();
-		shaker.close();
-		mGoogleApiClient.disconnect();
+		if (shaker != null) {
+			shaker.close();
+			shaker = null;
+		}
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient = null;
+		}
 	}
 
 	@Override
 	public void onStart() {
 		Log.d("In:", "onStart");
 		super.onStart();
-		shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		if (shaker == null) {
+			shaker = new Shaker(getActivity(), 2.0d, 750, this);
+		}
+		if (mGoogleApiClient == null) {
+			buildGoogleApiClient(getActivity());
+		}
 		mGoogleApiClient.connect();
 	}
 
@@ -244,4 +282,3 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		}
 	}
 }
-
