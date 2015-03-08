@@ -18,6 +18,11 @@ public final class DatabaseContract {
 		public static final String COLUMN_NAME_PRO = "pro";
 		public static final String COLUMN_NAME_LAT = "latitude";
 		public static final String COLUMN_NAME_LONG = "longitude";
-		public static final String COLUMN_NAME_DATE = "date";
+		public static final String COLUMN_NAME_LOTTO1 = "lotto1";
+		public static final String COLUMN_NAME_LOTTO2 = "lotto2";
+		public static final String COLUMN_NAME_LOTTO3 = "lotto3";
+		public static final String COLUMN_NAME_LOTTO4 = "lotto4";
+		public static final String COLUMN_NAME_LOTTO5 = "lotto5";
+		public static final String COLUMN_NAME_LOTTO6 = "lotto6";
 	}
 }

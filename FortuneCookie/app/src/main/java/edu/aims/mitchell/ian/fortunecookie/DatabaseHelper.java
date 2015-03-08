@@ -14,7 +14,7 @@ import edu.aims.mitchell.ian.fortunecookie.DatabaseContract.FortuneEntry;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database version.
 
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 3;
 	public static final String DATABASE_NAME = "fortune.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String COMMA_SEP = " , ";
@@ -26,7 +26,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					FortuneEntry.COLUMN_NAME_CHINESE + TEXT_TYPE + COMMA_SEP +
 					FortuneEntry.COLUMN_NAME_PRO + TEXT_TYPE + COMMA_SEP +
 					FortuneEntry.COLUMN_NAME_LAT + TEXT_TYPE + COMMA_SEP +
-					FortuneEntry.COLUMN_NAME_LONG + TEXT_TYPE +
+					FortuneEntry.COLUMN_NAME_LONG + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO1 + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO2 + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO3 + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO4 + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO5 + TEXT_TYPE + COMMA_SEP +
+					FortuneEntry.COLUMN_NAME_LOTTO6 + TEXT_TYPE +
 					" )";
 	private static final String SQL_DELETE_ENTRIES =
 			"DROP TABLE IF EXISTS " + FortuneEntry.TABLE_NAME;
@@ -67,6 +73,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(FortuneEntry.COLUMN_NAME_LAT, fortune.lat);
 		values.put(FortuneEntry.COLUMN_NAME_LONG, fortune.lon);
 
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO1, fortune.lotto[0]);
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO2, fortune.lotto[1]);
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO3, fortune.lotto[2]);
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO4, fortune.lotto[3]);
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO5, fortune.lotto[4]);
+		values.put(FortuneEntry.COLUMN_NAME_LOTTO6, fortune.lotto[5]);
+
+		Log.d("Stored Lotto", fortune.lotto.toString());
 
 		db.insert(
 				DatabaseContract.FortuneEntry.TABLE_NAME,
@@ -74,15 +88,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				values);
 		db.close();
 
+
 	}
 
 
-	public Fortune retrieve(String fortuneid) {
+	public Fortune retrieve(int fortuneid) {
 		Fortune loadedFortune = new Fortune();
 
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cur = db.query(FortuneEntry.TABLE_NAME, null, null, null, null, null, null);
-		cur.moveToPosition(Integer.getInteger(fortuneid));
+		cur.moveToPosition(fortuneid);
 
 		loadedFortune.fortune = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_FORTUNE));
 		loadedFortune.english = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_ENGLISH));
@@ -91,16 +106,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		loadedFortune.lat = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LAT));
 		loadedFortune.lon = cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LONG));
 
+		String[] lotto = {
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO1)),
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO2)),
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO3)),
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO4)),
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO5)),
+				cur.getString(cur.getColumnIndex(FortuneEntry.COLUMN_NAME_LOTTO6))
+		};
+
+		loadedFortune.lotto = lotto;
+
+
 		return loadedFortune;
 	}
 
 	public ArrayList<String> listSavedFortunes() {
 
-		Log.d("In", this.getClass().getSimpleName());
 		SQLiteDatabase db = getReadableDatabase();
 		Log.d("Loaded Database", db.getPath());
 		ArrayList<String> loadlist = new ArrayList<>();
-		String[] columns = {FortuneEntry.COLUMN_NAME_FORTUNE};
 		Cursor cur = db.query(FortuneEntry.TABLE_NAME, null, null, null, null, null, null);
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {

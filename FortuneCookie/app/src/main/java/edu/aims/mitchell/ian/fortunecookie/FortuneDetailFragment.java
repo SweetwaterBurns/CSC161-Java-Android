@@ -49,6 +49,8 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		//Clear Menu items from previous Fragments
+		menu.clear();
 		// Inflate the menu; this adds items to the action bar if it is present.
 		inflater.inflate(R.menu.menu_detail, menu);
 		MenuItem item = menu.findItem(R.id.menu_item_share);
@@ -87,7 +89,6 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 			getFragmentManager().beginTransaction()
 					//.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
 					.replace(R.id.container, fl)
-					.addToBackStack("Simple")
 					.commit();
 		}
 
@@ -97,12 +98,17 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 		}
 
 		if (id == R.id.action_fortune_simple) {
+
 			FortuneSimpleFragment fs = new FortuneSimpleFragment();
 
 			fs.setArguments(bCurrentFortune);
 
-			getFragmentManager().popBackStackImmediate("Simple", getFragmentManager().POP_BACK_STACK_INCLUSIVE);
-		}
+			getFragmentManager().popBackStack("Simple", getFragmentManager().POP_BACK_STACK_INCLUSIVE);
+
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, fs)
+					.commit();
+			}
 
 		if (id == R.id.menu_item_save) {
 			dbhelper.add(currentFortune);
@@ -249,17 +255,17 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 		} else if (mLastLocation == null) {
 			Log.d("mLastLocation", " = null");
 		}
-		Log.d("FortuneFragmentSimple.", "onConnected");
+		Log.d("FortuneFragmentDetail.", "onConnected");
 	}
 
 	@Override
 	public void onConnectionSuspended(int i) {
-		Log.d("FortuneFragmentSimple.", "onConnectionSuspended");
+		Log.d("FortuneFragmentDetail.", "onConnectionSuspended");
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
-		Log.d("FortuneFragmentSimple", " Connection Failed");
+		Log.d("FortuneFragmentDetail", " Connection Failed");
 	}
 
 	protected synchronized void buildGoogleApiClient(Context ctx) {

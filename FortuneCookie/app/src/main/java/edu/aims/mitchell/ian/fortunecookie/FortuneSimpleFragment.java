@@ -52,6 +52,8 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		//Clear Menu items from previous Fragments
+		menu.clear();
 		// Inflate the menu; this adds items to the action bar if it is present.
 		inflater.inflate(R.menu.menu_simple, menu);
 		MenuItem item = menu.findItem(R.id.menu_item_share);

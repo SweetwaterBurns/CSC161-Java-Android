@@ -97,6 +97,7 @@ public class Fortune implements Parcelable {
 			urlConnection.connect();
 
 			InputStream inputStream = urlConnection.getInputStream();
+
 			StringBuilder buffer = new StringBuilder();
 			if (inputStream == null) {
 				return null;
