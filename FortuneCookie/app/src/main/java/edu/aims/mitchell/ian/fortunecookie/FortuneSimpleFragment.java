@@ -73,7 +73,7 @@ public class FortuneSimpleFragment extends Fragment implements Shaker.Callback, 
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		if (id != R.id.menu_item_save && id!=R.id.action_new_fortune) {
+		if (id != R.id.menu_item_save && id != R.id.action_new_fortune) {
 			if (shaker != null) {
 				shaker.close();
 				shaker = null;

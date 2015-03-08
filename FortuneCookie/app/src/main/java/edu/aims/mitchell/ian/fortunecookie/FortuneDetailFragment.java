@@ -68,7 +68,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 
-		if (id != R.id.menu_item_save && id!=R.id.action_new_fortune) {
+		if (id != R.id.menu_item_save && id != R.id.action_new_fortune) {
 			if (shaker != null) {
 				shaker.close();
 				shaker = null;
@@ -108,7 +108,7 @@ public class FortuneDetailFragment extends Fragment implements Shaker.Callback, 
 			getFragmentManager().beginTransaction()
 					.replace(R.id.container, fs)
 					.commit();
-			}
+		}
 
 		if (id == R.id.menu_item_save) {
 			dbhelper.add(currentFortune);

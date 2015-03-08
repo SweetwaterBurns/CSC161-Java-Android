@@ -63,6 +63,7 @@ public class FortuneListFragment extends ListFragment {
 				.commit();
 
 	}
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
